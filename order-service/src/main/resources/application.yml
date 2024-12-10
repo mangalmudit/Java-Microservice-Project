@@ -1,0 +1,44 @@
+server:
+  port: 8081
+spring:
+#  zipkin:
+#    base-url: http://localhost:9411/
+  h2:
+    console:
+      enabled: true
+  application:
+    name: ORDER-SERVICE
+logging:
+  file: C:\Users\mudit_mangal\Desktop\orderservice.log
+  
+#  spring:
+#    security:
+#      user:
+#        name: user  # The username for authentication
+#        password: password  # The password for authentication
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
+
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      orderService:
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 10
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
